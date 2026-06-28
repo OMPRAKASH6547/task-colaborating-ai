@@ -76,14 +76,15 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
-        token.emailVerified = user.emailVerified;
+        token.emailVerified =
+          typeof user.emailVerified === "boolean" ? user.emailVerified : false;
       }
       return token;
     },
     async session({ session, token }) {
       session.user.id = token.id;
       session.user.role = token.role;
-      session.user.emailVerified = token.emailVerified;
+      session.user.emailVerified = Boolean(token.emailVerified);
       return session;
     },
   },

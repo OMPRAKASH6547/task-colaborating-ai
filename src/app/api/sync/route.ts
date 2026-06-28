@@ -16,6 +16,7 @@ import {
   validatePayloadSize,
 } from "@/lib/api-utils";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { normalizeVectorClock } from "@/lib/utils";
 
 async function authenticate(request: NextRequest) {
   const token = getAuthHeader(request) ?? request.cookies.get("accessToken")?.value;
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
         userId: op.userId.toString(),
         timestamp: op.timestamp,
         version: op.version,
-        vectorClock: Object.fromEntries(op.vectorClock ?? new Map()),
+        vectorClock: normalizeVectorClock(op.vectorClock),
         operationType: op.operationType,
         payload: op.payload,
       })),
@@ -121,7 +122,7 @@ export async function POST(request: NextRequest) {
       userId: op.userId.toString(),
       timestamp: op.timestamp,
       version: op.version,
-      vectorClock: Object.fromEntries(op.vectorClock ?? new Map()),
+      vectorClock: normalizeVectorClock(op.vectorClock),
       operationType: op.operationType as "insert" | "delete" | "replace" | "restore",
       payload: op.payload,
     }));

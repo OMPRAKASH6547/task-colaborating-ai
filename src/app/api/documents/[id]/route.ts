@@ -9,6 +9,7 @@ import {
   getAuthHeader,
 } from "@/lib/api-utils";
 import { sanitizeHtml } from "@/lib/sanitize";
+import { normalizeVectorClock } from "@/lib/utils";
 
 async function authenticate(request: NextRequest) {
   const token = getAuthHeader(request) ?? request.cookies.get("accessToken")?.value;
@@ -43,7 +44,7 @@ export async function GET(
       tags: doc.tags,
       isFavourite: doc.isFavourite,
       version: doc.version,
-      vectorClock: Object.fromEntries(doc.vectorClock ?? new Map()),
+      vectorClock: normalizeVectorClock(doc.vectorClock),
       role,
       status: doc.status,
       createdAt: doc.createdAt,

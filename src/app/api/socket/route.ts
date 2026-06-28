@@ -1,21 +1,16 @@
-import type { NextRequest } from "next/server";
-import { initSocket } from "@/lib/socket/server";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { getSocketServer } from "@/lib/socket/server";
 
-export async function GET(req: NextRequest) {
-  const res = {
-    socket: {
-      server: {
-        io: undefined as ReturnType<typeof initSocket> | undefined,
-      },
-    },
-  };
-
-  initSocket(req as unknown as NextApiRequest, res as unknown as NextApiResponse);
-
-  return new Response("Socket.IO server initialized", { status: 200 });
+export async function GET() {
+  const initialized = getSocketServer() !== null;
+  return Response.json({
+    success: true,
+    message: initialized
+      ? "Socket.IO server is running"
+      : "Socket.IO initializes with the custom Node server (see server.ts)",
+    initialized,
+  });
 }
 
-export async function POST(req: NextRequest) {
-  return GET(req);
+export async function POST() {
+  return GET();
 }

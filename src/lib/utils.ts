@@ -62,6 +62,16 @@ export function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, "").trim();
 }
 
+export function normalizeVectorClock(
+  clock: Record<string, number> | Map<string, number> | null | undefined,
+): Record<string, number> {
+  if (!clock) return {};
+  if (clock instanceof Map) {
+    return Object.fromEntries(clock.entries());
+  }
+  return { ...clock };
+}
+
 export function compareVectorClocks(
   a: Record<string, number>,
   b: Record<string, number>,
