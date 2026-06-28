@@ -53,15 +53,10 @@ export class AuthService {
       expiresAt: getTokenExpiry(24 * 7),
     });
 
-    // Fixed: Type-safe way to remove password
     const userObj = user.toObject();
-    const { password: _, ...userWithoutPassword } = userObj;
+    delete (userObj as unknown as Record<string, unknown>).password;
 
-    return { 
-      user: userWithoutPassword as Omit<IUser, "password">, 
-      accessToken, 
-      refreshToken 
-    };
+    return { user: userObj, accessToken, refreshToken };
   }
 
   static async login(
@@ -106,15 +101,10 @@ export class AuthService {
       expiresAt: getTokenExpiry(24 * 7),
     });
 
-    // Fixed: Type-safe way to remove password
     const userObj = user.toObject();
-    const { password: _, ...userWithoutPassword } = userObj;
+    delete (userObj as unknown as Record<string, unknown>).password;
 
-    return { 
-      user: userWithoutPassword as Omit<IUser, "password">, 
-      accessToken, 
-      refreshToken 
-    };
+    return { user: userObj, accessToken, refreshToken };
   }
 
   static async refreshAccessToken(refreshToken: string): Promise<{
