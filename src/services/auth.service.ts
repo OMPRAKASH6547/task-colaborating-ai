@@ -12,6 +12,11 @@ import {
 import { Session } from "@/db/models/Session";
 import type { RegisterInput } from "@/schemas";
 
+function toPublicUser(user: IUser): Omit<IUser, "password"> {
+  const { password: _password, ...publicUser } = user.toObject();
+  return publicUser;
+}
+
 export class AuthService {
   static async register(input: RegisterInput): Promise<{
     user: Omit<IUser, "password">;
@@ -53,10 +58,11 @@ export class AuthService {
       expiresAt: getTokenExpiry(24 * 7),
     });
 
-    const userObj = user.toObject();
-    delete (userObj as unknown as Record<string, unknown>).password;
-
-    return { user: userObj, accessToken, refreshToken };
+    return {
+      user: toPublicUser(user),
+      accessToken,
+      refreshToken,
+    };
   }
 
   static async login(
@@ -101,10 +107,11 @@ export class AuthService {
       expiresAt: getTokenExpiry(24 * 7),
     });
 
-    const userObj = user.toObject();
-    delete (userObj as unknown as Record<string, unknown>).password;
-
-    return { user: userObj, accessToken, refreshToken };
+    return {
+      user: toPublicUser(user),
+      accessToken,
+      refreshToken,
+    };
   }
 
   static async refreshAccessToken(refreshToken: string): Promise<{

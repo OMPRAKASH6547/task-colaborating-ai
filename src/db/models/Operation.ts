@@ -57,7 +57,6 @@ const OperationSchema = new Schema<IOperation>(
 
 OperationSchema.index({ documentId: 1, version: 1 });
 OperationSchema.index({ documentId: 1, timestamp: 1 });
-OperationSchema.index({ operationId: 1 }, { unique: true });
 
 export const Operation: Model<IOperation> =
   mongoose.models.Operation ??
