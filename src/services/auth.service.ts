@@ -54,7 +54,7 @@ export class AuthService {
     });
 
     const userObj = user.toObject();
-    delete (userObj as Record<string, unknown>).password;
+    delete (userObj as unknown as Record<string, unknown>).password;
 
     return { user: userObj, accessToken, refreshToken };
   }
@@ -102,7 +102,7 @@ export class AuthService {
     });
 
     const userObj = user.toObject();
-    delete (userObj as Record<string, unknown>).password;
+    delete (userObj as unknown as Record<string, unknown>).password;
 
     return { user: userObj, accessToken, refreshToken };
   }

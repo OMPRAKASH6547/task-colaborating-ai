@@ -1,12 +1,12 @@
 import { Queue, Worker } from "bullmq";
-import IORedis from "ioredis";
 import { connectDB } from "@/db/connection";
 import { SyncQueue } from "@/db/models";
 import mongoose from "mongoose";
 
-const connection = new IORedis(process.env.REDIS_URL ?? "redis://localhost:6379", {
+const connection = {
+  url: process.env.REDIS_URL ?? "redis://localhost:6379",
   maxRetriesPerRequest: null,
-});
+};
 
 export const syncQueue = new Queue("document-sync", { connection });
 

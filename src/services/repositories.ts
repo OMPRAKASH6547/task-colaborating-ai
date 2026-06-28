@@ -42,9 +42,7 @@ export class DocumentRepository {
     return DocumentModel.find({
       ownerId: new mongoose.Types.ObjectId(ownerId),
       ...filter,
-    })
-      .sort({ updatedAt: -1 })
-      .lean();
+    }).sort({ updatedAt: -1 });
   }
 
   static async findShared(userId: string): Promise<IDocument[]> {
@@ -56,9 +54,7 @@ export class DocumentRepository {
     return DocumentModel.find({
       _id: { $in: docIds },
       status: "active",
-    })
-      .sort({ updatedAt: -1 })
-      .lean();
+    }).sort({ updatedAt: -1 });
   }
 
   static async findDeleted(ownerId: string): Promise<IDocument[]> {
@@ -66,9 +62,7 @@ export class DocumentRepository {
     return DocumentModel.find({
       ownerId: new mongoose.Types.ObjectId(ownerId),
       status: "deleted",
-    })
-      .sort({ updatedAt: -1 })
-      .lean();
+    }).sort({ updatedAt: -1 });
   }
 
   static async update(
@@ -159,9 +153,7 @@ export class DocumentRepository {
         { status: "active" },
         { $text: { $search: query } },
       ],
-    })
-      .sort({ score: { $meta: "textScore" } })
-      .lean();
+    }).sort({ score: { $meta: "textScore" } });
   }
 }
 
